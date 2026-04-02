@@ -84,7 +84,6 @@ export default function Landing() {
           {[
             { n: '38', l: 'University Partners' },
             { n: '2.2M+', l: 'Community Reach' },
-            { n: '3', l: 'Community Partners' },
           ].map(s => (
             <div key={s.l} style={{ textAlign: 'center' }}>
               <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 28, color: R, lineHeight: 1, marginBottom: 4, fontWeight: 700 }}>{s.n}</div>
@@ -473,8 +472,8 @@ export default function Landing() {
       {/* ── FOOTER ── */}
       <footer style={{ borderTop: '1px solid #E8E4DF', padding: '48px 24px', textAlign: 'center' }}>
         <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 24, color: R, marginBottom: 8 }}>Oromo Health Knowledge Bridge</div>
-        <div style={{ fontSize: 14, color: '#555', marginBottom: 4 }}>Research Lead: Aimon Ibssa, B.S. Pre-M.D.</div>
-        <div><a href="mailto:oromobuckeyes@gmail.com" style={{ fontSize: 14, color: R, textDecoration: 'none' }}>oromobuckeyes@gmail.com</a></div>
+        <div style={{ fontSize: 14, color: '#555', marginBottom: 4 }}>Research Lead: Aimon Ibssa</div>
+        <div><a href="mailto:aimonibssa@gmail.com" style={{ fontSize: 14, color: R, textDecoration: 'none' }}>aimonibssa@gmail.com</a></div>
         <div style={{ fontSize: 13, color: '#999', marginTop: 24, fontStyle: 'italic' }}>We have the access. They don't. Let's fix that.</div>
       </footer>
 
