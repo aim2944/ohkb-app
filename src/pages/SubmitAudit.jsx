@@ -15,6 +15,8 @@ export default function SubmitAudit() {
   const [submitting, setSub]    = useState(false)
   const [success, setSuccess]   = useState(false)
   const [error, setError]       = useState('')
+  const [savedUniversity, setSavedUniversity] = useState('')
+  const [savedContribType, setSavedContribType] = useState('')
 
   useEffect(() => {
     if (pending?.translatorName) setAuthor(pending.translatorName)
@@ -87,6 +89,8 @@ export default function SubmitAudit() {
         // Don't fail submission if email fails
       }
 
+      setSavedUniversity(pending.university || '')
+      setSavedContribType(pending.contributionType || '')
       setSuccess(true)
       setPending(null)
     } catch (err) {
@@ -126,8 +130,8 @@ export default function SubmitAudit() {
               Please find attached my full contribution for the research registry.<br />
               <br />
               • Title: {title}<br />
-              • University: {pending?.university}<br />
-              • Contribution Type: {pending?.contributionType}<br />
+              • University: {savedUniversity}<br />
+              • Contribution Type: {savedContribType}<br />
               • Source: {sourceLink}<br />
               <br />
               Thank you for reviewing my submission.

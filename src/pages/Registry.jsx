@@ -33,9 +33,6 @@ export default function Registry() {
     return matchSearch && matchFilter
   })
 
-  const totalWords = docs.reduce((a, d) => a + (d.wordCount || 0), 0)
-  const totalHours = (totalWords / 1000).toFixed(1)
-
   return (
     <div style={{ padding: '40px 48px', maxWidth: 960, margin: '0 auto' }} className="reg-pad">
 
@@ -43,20 +40,6 @@ export default function Registry() {
         <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: R, marginBottom: 8 }}>Student Contributions</div>
         <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Contributions by University</h1>
         <p style={{ color: '#555', fontSize: 16 }}>Medical research translations submitted by students across our partner institutions.</p>
-      </div>
-
-      {/* Registry stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }} className="reg-stats">
-        {[
-          { label: 'Total Contributions', value: docs.length },
-          { label: 'Words Translated',    value: totalWords.toLocaleString() },
-          { label: 'Research Hours',      value: `${totalHours} hrs` },
-        ].map(s => (
-          <div key={s.label} style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 10, padding: '18px 20px', textAlign: 'center' }}>
-            <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 28, color: R, lineHeight: 1, marginBottom: 4 }}>{s.value}</div>
-            <div style={{ fontSize: 12, color: '#999' }}>{s.label}</div>
-          </div>
-        ))}
       </div>
 
       {/* Search + filter */}
@@ -149,8 +132,7 @@ function RegistryCard({ doc }) {
             <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 4 }}>{doc.title || 'Untitled'}</h3>
             <div style={{ fontSize: 13, color: '#777', marginBottom: 8 }}>
               by {doc.author || 'Anonymous'} · {ts}
-              {doc.wordCount ? ` · ${doc.wordCount.toLocaleString()} words` : ''}
-              {doc.estimatedHours ? ` · ${doc.estimatedHours} contribution hrs` : ''}
+              {doc.university ? ` · ${doc.university}` : ''}
             </div>
             {doc.sourceLink && (
               <a href={doc.sourceLink} target="_blank" rel="noreferrer"
