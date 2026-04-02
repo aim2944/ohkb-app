@@ -116,7 +116,7 @@ ${icmjeVerif.trim() || '(not filled)'}
 ------------------------------------------------------------
 FULL TRANSLATION (from Translation Engine)
 ------------------------------------------------------------
-${pending?.fullTranslation?.slice(0, 3000) || '(attach PDF with full translation)'}
+${pending?.fullTranslation || '(no translation found)'}
 
 Thank you for reviewing my submission.
 
