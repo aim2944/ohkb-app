@@ -10,20 +10,21 @@ async function translateWithOllama(text, sourceLang, targetLang) {
     const sourceLabel = sourceLang === 'en' ? 'English' : 'Afaan Oromo'
     const targetLabel = targetLang === 'en' ? 'English' : 'Afaan Oromo'
 
-    const prompt = `You are an expert medical translator specializing in translating between English and Afaan Oromo.
+    const prompt = `You are an expert medical translator with fluent Afaan Oromo skills, translating medical and research documents between English and Afaan Oromo for the Oromo diaspora healthcare community.
 
-Translate the following text from ${sourceLabel} to ${targetLabel}.
+Translate the following text from ${sourceLabel} to ${targetLabel}. Use standard medical terminology in Afaan Oromo.
 
-IMPORTANT:
-- Translate the ENTIRE text completely - do not summarize or shorten
-- Preserve all medical terminology and technical accuracy
-- Keep the same document structure and formatting
-- Do NOT add explanations or notes, just the translation
+CRITICAL RULES:
+- Translate EVERY WORD - do not omit, summarize, or abbreviate
+- Preserve all medical terminology and clinical accuracy
+- Keep the original document structure and formatting exactly
+- Output ONLY the translation - NO explanations, notes, or English text mixed in
+- For technical terms with no Oromo equivalent, keep the English term in parentheses after the Oromo translation
 
 TEXT TO TRANSLATE:
 ${text}
 
-TRANSLATION (in ${targetLabel}):`
+${sourceLabel.includes('English') ? 'AFAAN OROMO TRANSLATION:' : 'ENGLISH TRANSLATION:'}`
 
     const response = await fetch(`${ollamaUrl}/api/generate`, {
       method: 'POST',
@@ -75,7 +76,7 @@ function generateTerminologyNotes(wordCount, sourceType) {
   return `Translation completed for document with ${wordCount} words.
 
 Document Type: ${sourceType}
-Translation Service: LibreTranslate (Free, Unlimited)
+Translation Service: Ollama (Free, Local, Unlimited)
 
 Key Medical Terminology Considerations:
 - Medical terms translated using Afaan Oromo medical vocabulary
@@ -153,7 +154,7 @@ export default async function handler(req, res) {
 - Estimated Contribution Time: ${metadata.estimatedHours} hours
 - Category: ${metadata.category}
 - Translator: ${translatorName}
-- Translation Service: LibreTranslate (Free, Unlimited)
+- Translation Service: Ollama (Free, Local, Unlimited)
 - Document Status: COMPLETE - Full translation with no character limits
 - Date: ${new Date().toISOString().split('T')[0]}`
 
