@@ -36,7 +36,7 @@ export default function SubmitAudit() {
       || pending.category || 'Research'
 
     try {
-      await addDoc(collection(db, 'translations'), {
+      const submissionData = {
         userId:               user?.uid || 'anonymous',
         timestamp:            serverTimestamp(),
         title:                title.trim(),
@@ -45,6 +45,7 @@ export default function SubmitAudit() {
         direction:            pending.direction,
         sourceType:           pending.sourceType,
         contributionType:     pending.contributionType || 'community',
+        university:           pending.university || 'Not specified',
         wordCount,
         estimatedHours:       parseFloat((wordCount / 1000).toFixed(2)),
         category,
@@ -52,7 +53,22 @@ export default function SubmitAudit() {
         terminologyNotes:     pending.terminologyNotes,
         reviewerVerification: pending.reviewerVerification,
         researchMetadata:     pending.researchMetadata,
-      })
+      }
+
+      await addDoc(collection(db, 'translations'), submissionData)
+
+      // Send to email
+      try {
+        await fetch('/api/send-submission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...submissionData, timestamp: new Date().toISOString() })
+        })
+      } catch (emailErr) {
+        console.error('Email notification failed:', emailErr)
+        // Don't fail submission if email fails
+      }
+
       setSuccess(true)
       setPending(null)
     } catch (err) {

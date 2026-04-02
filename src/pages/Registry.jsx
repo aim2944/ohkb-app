@@ -21,7 +21,7 @@ export default function Registry() {
     return unsub
   }, [db])
 
-  const categories = ['All', 'Research', 'Clinical Translation', 'Public Health Education']
+  const universities = ['All', ...new Set(docs.map(d => d.university || 'Unknown').filter(u => u))]
 
   const filtered = docs.filter(d => {
     const q = search.toLowerCase()
@@ -29,7 +29,7 @@ export default function Registry() {
       (d.title || '').toLowerCase().includes(q) ||
       (d.author || '').toLowerCase().includes(q) ||
       (d.sourceType || '').toLowerCase().includes(q)
-    const matchFilter = filter === 'All' || d.category === filter
+    const matchFilter = filter === 'All' || d.university === filter
     return matchSearch && matchFilter
   })
 
@@ -40,9 +40,9 @@ export default function Registry() {
     <div style={{ padding: '40px 48px', maxWidth: 960, margin: '0 auto' }} className="reg-pad">
 
       <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: R, marginBottom: 8 }}>Research Database</div>
-        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Global Research Registry</h1>
-        <p style={{ color: '#555', fontSize: 16 }}>Verified translations submitted by the OHKB research network. Open access, free forever.</p>
+        <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: R, marginBottom: 8 }}>Student Contributions</div>
+        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Contributions by University</h1>
+        <p style={{ color: '#555', fontSize: 16 }}>Medical research translations submitted by students across our partner institutions.</p>
       </div>
 
       {/* Registry stats */}
@@ -67,17 +67,23 @@ export default function Registry() {
           placeholder="Search by title, researcher, or document type…"
           style={{ flex: 1, minWidth: 200, border: '1px solid #E8E4DF', borderRadius: 8, padding: '10px 14px', fontSize: 14, fontFamily: "'Outfit', sans-serif", outline: 'none' }}
         />
-        <div style={{ display: 'flex', gap: 8 }}>
-          {categories.map(c => (
-            <button key={c} onClick={() => setFilter(c)}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {universities.slice(0, 8).map(u => (
+            <button key={u} onClick={() => setFilter(u)}
               style={{ padding: '8px 14px', borderRadius: 20, border: '1px solid', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Outfit', sans-serif", transition: 'all 0.15s',
-                borderColor: filter === c ? R : '#E8E4DF',
-                background: filter === c ? R : 'white',
-                color: filter === c ? 'white' : '#555',
+                borderColor: filter === u ? R : '#E8E4DF',
+                background: filter === u ? R : 'white',
+                color: filter === u ? 'white' : '#555',
               }}>
-              {c}
+              {u}
             </button>
           ))}
+          {universities.length > 8 && (
+            <button onClick={() => setFilter(universities[Math.floor(Math.random() * universities.length)])}
+              style={{ padding: '8px 14px', borderRadius: 20, border: '1px solid #E8E4DF', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Outfit', sans-serif", color: '#999' }}>
+              +{universities.length - 8} more
+            </button>
+          )}
         </div>
       </div>
 

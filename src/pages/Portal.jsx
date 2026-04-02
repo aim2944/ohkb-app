@@ -12,17 +12,26 @@ const NAV = [
   { id: 'dashboard',  label: 'Dashboard',            icon: '◈' },
   { id: 'translate',  label: 'Translation Engine',    icon: '⟺' },
   { id: 'submit',     label: 'Submit Contribution',   icon: '✦' },
-  { id: 'registry',  label: 'Global Research Registry', icon: '◉' },
+  { id: 'registry',  label: 'Student Contributions',  icon: '◉' },
 ]
 
 export default function Portal() {
   const [user, setUser]           = useState(null)
   const [pending, setPending]     = useState(null) // pre-filled translation data
   const [mobileOpen, setMobile]  = useState(false)
+  const [daysLeft, setDaysLeft]   = useState(0)
   const nav = useNavigate()
   const loc = useLocation()
 
   const activeTab = loc.pathname.split('/portal/')[1]?.split('/')[0] || 'dashboard'
+
+  // Calculate days left until April 20, 2026 midnight
+  useEffect(() => {
+    const deadline = new Date(2026, 3, 20, 23, 59, 59).getTime()
+    const now = new Date().getTime()
+    const daysRemaining = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24))
+    setDaysLeft(Math.max(0, daysRemaining))
+  }, [])
 
   useEffect(() => {
     if (!auth) return
@@ -102,6 +111,12 @@ export default function Portal() {
 
         {/* ── MAIN CONTENT ── */}
         <main style={{ flex: 1, background: '#FAF8F5', overflowY: 'auto' }} className="portal-main">
+          {daysLeft > 0 && (
+            <div style={{ background: '#BB0000', color: 'white', padding: '16px 48px', textAlign: 'center', borderBottom: '1px solid #990000' }}>
+              <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>⏱ Co-Authorship Deadline</div>
+              <div style={{ fontSize: 14 }}>U.S. students: {daysLeft} days left to complete submissions by April 20, 2026 midnight to earn co-authorship</div>
+            </div>
+          )}
           <Routes>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard"  element={<Dashboard />} />

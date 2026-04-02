@@ -21,6 +21,48 @@ const CONTRIBUTION_TYPES = [
   { value: 'publication', label: '📚 Publication Track', desc: 'Systematic analysis + co-authored paper (ICMJE criteria)' },
 ]
 
+const UNIVERSITIES = [
+  '— Select Your University —',
+  'University of Minnesota (Twin Cities)',
+  'The Ohio State University',
+  'Augsburg University',
+  'University of Minnesota Duluth',
+  'Michigan State University',
+  'South Dakota State University',
+  'University of Texas at Austin',
+  'Emory University',
+  'Georgia State University',
+  'University of North Texas',
+  'University of Washington',
+  'Seattle University',
+  'Portland State University',
+  'University of Colorado Boulder',
+  'Harvard University',
+  'Columbia University',
+  'University of Alberta',
+  'York University',
+  'Carleton University',
+  'University of Manitoba',
+  'MacEwan University',
+  'Addis Ababa University',
+  'Jimma University',
+  'Haramaya University',
+  'Adama Science and Technology University',
+  'Ambo University',
+  'Wollega University',
+  'Madda Walabu University',
+  'Bule Hora University',
+  'Arsi University',
+  'Metu University',
+  'Oda Bultum University',
+  'Salale University',
+  'Borena University',
+  'Dembi Dollo University',
+  'Rift Valley University',
+  'New Generation University College',
+  'Ethiopia Adventist College',
+]
+
 export default function Translate() {
   const { setPending } = useContext(PortalCtx)
   const nav = useNavigate()
@@ -30,6 +72,7 @@ export default function Translate() {
   const [sourceType, setSourceType] = useState('Research Paper')
   const [contributionType, setContributionType] = useState('community')
   const [translatorName, setName] = useState('')
+  const [university, setUniversity] = useState('')
   const [loading, setLoading]     = useState(false)
   const [error, setError]         = useState('')
   const [result, setResult]       = useState(null)
@@ -50,7 +93,7 @@ export default function Translate() {
 
   function handleSubmit() {
     if (!result) return
-    setPending({ ...result, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous', contributionType })
+    setPending({ ...result, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous', contributionType, university })
     nav('/portal/submit')
   }
 
@@ -90,6 +133,13 @@ export default function Translate() {
               placeholder="e.g. Aimon Ibssa"
               style={{ ...selectStyle, outline: 'none' }} />
           </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <label style={labelStyle}>Your University *</label>
+          <select value={university} onChange={e => setUniversity(e.target.value)} style={selectStyle}>
+            {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
+          </select>
         </div>
 
         <div style={{ marginBottom: 20 }}>

@@ -270,6 +270,81 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── UNIVERSITY PARTNERS ── */}
+      <section style={sectionStyle}>
+        <div style={sectionLabel}>Our Partners</div>
+        <h2 style={h2Style}>University Partners Across North America & Oromia</h2>
+        <p style={pStyle}>OHKB is built in partnership with student associations and universities across the Oromo diaspora in North America, and leading institutions in Oromia.</p>
+
+        <div style={{ marginTop: 48, marginBottom: 40 }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>North American Universities</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }} className="university-grid">
+            {[
+              'University of Minnesota (Twin Cities)',
+              'The Ohio State University',
+              'Augsburg University',
+              'University of Minnesota Duluth',
+              'Michigan State University',
+              'South Dakota State University',
+              'University of Texas at Austin',
+              'Emory University',
+              'Georgia State University',
+              'University of North Texas',
+              'University of Washington',
+              'Seattle University',
+              'Portland State University',
+              'University of Colorado Boulder',
+              'Harvard University',
+              'Columbia University',
+              'University of Alberta',
+              'York University',
+              'Carleton University',
+              'University of Manitoba',
+              'MacEwan University',
+            ].map(u => (
+              <div key={u} style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 8, padding: '12px 16px', fontSize: 13, color: '#555', lineHeight: 1.4 }}>
+                {u}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 40 }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>Oromia Universities</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }} className="university-grid">
+            {[
+              'Addis Ababa University',
+              'Jimma University',
+              'Haramaya University',
+              'Adama Science and Technology University',
+              'Ambo University',
+              'Wollega University',
+              'Madda Walabu University',
+              'Bule Hora University',
+              'Arsi University',
+              'Metu University',
+              'Oda Bultum University',
+              'Salale University',
+              'Borena University',
+              'Dembi Dollo University',
+              'Rift Valley University',
+              'New Generation University College',
+              'Ethiopia Adventist College',
+            ].map(u => (
+              <div key={u} style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 8, padding: '12px 16px', fontSize: 13, color: '#555', lineHeight: 1.4 }}>
+                {u}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ background: '#FFF5E8', border: '1px solid #FFE0CC', borderRadius: 12, padding: 24, textAlign: 'center' }}>
+          <p style={{ fontSize: 14, color: '#555', lineHeight: 1.6, margin: 0 }}>
+            <strong>Dr. Ibro Mengitsu</strong> (Mattu University, Clinical Advisor) — Oversees publication process and research quality. All publications reviewed and approved by Ethiopian clinical leadership.
+          </p>
+        </div>
+      </section>
+
       {/* ── FOOTER ── */}
       <footer style={{ borderTop: '1px solid #E8E4DF', padding: '48px 24px', textAlign: 'center' }}>
         <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 24, color: R, marginBottom: 8 }}>Oromo Health Knowledge Bridge</div>
@@ -286,6 +361,7 @@ export default function Landing() {
           .hours-grid        { grid-template-columns: 1fr !important; }
           .topic-grid        { grid-template-columns: 1fr !important; }
           .benefit-grid      { grid-template-columns: 1fr !important; }
+          .university-grid   { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
