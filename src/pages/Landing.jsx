@@ -181,21 +181,22 @@ export default function Landing() {
         </div>
 
         <div style={{ marginTop: 40, background: '#FFF5E8', border: '1px solid #FFE0CC', borderRadius: 12, padding: 28, marginBottom: 24 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, color: '#111' }}>📚 Steps to Qualify for Publication Track</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, color: '#111' }}>📚 The Clinical Research Pathway</h3>
+          <p style={{ fontSize: 14, color: '#555', marginBottom: 20, lineHeight: 1.6 }}>Authorship is earned through completing our 3-stage research pipeline. You must complete the full workflow for your chosen topic—authorship is awarded only after project completion.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {[
-              { n: 1, t: 'Perform Analysis', d: 'Systematically review 5+ papers on a focused topic. Document your search strategy, inclusion criteria, and findings.' },
-              { n: 2, t: 'Co-Author Manuscript', d: 'Write a research brief, systematic review, or evidence synthesis. You must contribute substantially to writing, not just translating.' },
-              { n: 3, t: 'Meet ICMJE Criteria', d: 'Confirm you meet journal authorship standards: conception/design, data interpretation, manuscript revision, and accountability.' },
+              { n: 1, t: 'Stage 1: Translation Pipeline', sub: 'Required First', d: 'Translate & verify 5,000+ words (5–7 papers) on your chosen health topic. This builds the Global Research Registry and proves your mastery of medical terminology.' },
+              { n: 2, t: 'Stage 2: Evidence Synthesis', sub: 'After Translation Quota', d: 'Analyze your translated papers. Identify clinical gaps, regional disparities, and implementation barriers. Create a research brief summarizing findings for the Oromo community.' },
+              { n: 3, t: 'Stage 3: Manuscript & Journal', sub: 'Upon Project Completion', d: 'Top syntheses are selected for formal manuscript writing and peer-reviewed publication. Collaborate with the Research Lead. Earn co-authorship credit on the published paper.' },
             ].map(s => (
               <div key={s.n} style={{ background: 'white', borderRadius: 8, padding: 16, textAlign: 'center', border: '1px solid #FFD8A8' }}>
-                <div style={{ fontWeight: 700, color: '#FF9500', marginBottom: 8 }}>Step {s.n}</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#BB0000', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>{s.sub}</div>
                 <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>{s.t}</div>
                 <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5 }}>{s.d}</div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12, color: '#888', marginTop: 16, marginBottom: 0, fontStyle: 'italic' }}>Discuss authorship explicitly with collaborators before submission. Use ICMJE authorship checklist to confirm eligibility.</p>
+          <p style={{ fontSize: 12, color: '#888', marginTop: 16, marginBottom: 0, fontStyle: 'italic' }}>Authorship is selective. Only contributors who complete the full project cycle are eligible for co-authorship on published research.</p>
         </div>
 
         <div style={{ marginTop: 0, background: '#FFF', border: '1px solid #FFD8A8', borderRadius: 12, padding: 28 }}>
