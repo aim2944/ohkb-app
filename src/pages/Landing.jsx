@@ -42,17 +42,34 @@ export default function Landing() {
         minHeight: '100vh', display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', textAlign: 'center',
         padding: '120px 24px 80px', position: 'relative', overflow: 'hidden',
+        background: `
+          linear-gradient(135deg, rgba(250,248,245,0.94) 0%, rgba(255,245,232,0.91) 50%, rgba(250,248,245,0.90) 100%),
+          linear-gradient(180deg, 
+            #87CEEB 0%,
+            #B0D4F1 20%,
+            #D4A574 50%,
+            #8B7355 70%,
+            #6B5D52 100%
+          )
+        `,
+        backgroundAttachment: 'fixed',
       }}>
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'linear-gradient(135deg, rgba(250,248,245,0.95) 0%, rgba(250,248,245,0.90) 50%, rgba(187,0,0,0.04) 100%)',
+          zIndex: 1, pointerEvents: 'none',
+        }} />
         <div style={{
           position: 'absolute', top: -200, right: -200, width: 600, height: 600,
           background: 'radial-gradient(circle, rgba(187,0,0,0.06) 0%, transparent 70%)',
-          borderRadius: '50%', pointerEvents: 'none',
+          borderRadius: '50%', pointerEvents: 'none', zIndex: 2,
         }} />
 
         <div className="animate-fade-up" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: '#FFE8E8', color: R, padding: '8px 16px',
           borderRadius: 100, fontSize: 13, fontWeight: 600, marginBottom: 32,
+          position: 'relative', zIndex: 3,
         }}>
           <span className="animate-pulse-dot" style={{ width: 8, height: 8, background: R, borderRadius: '50%', display: 'inline-block' }} />
           Active Research Project
@@ -62,6 +79,7 @@ export default function Landing() {
           fontFamily: "'Instrument Serif', serif",
           fontSize: 'clamp(40px, 7vw, 80px)', lineHeight: 1.05,
           maxWidth: 800, marginBottom: 24,
+          position: 'relative', zIndex: 3,
         }}>
           Oromo Health <span style={{ color: R }}>Knowledge Bridge</span>
         </h1>
@@ -69,6 +87,7 @@ export default function Landing() {
         <p className="animate-fade-up-2" style={{
           fontSize: 'clamp(16px, 2vw, 20px)', color: '#555',
           maxWidth: 580, lineHeight: 1.6, marginBottom: 16, fontWeight: 300,
+          position: 'relative', zIndex: 3,
         }}>
           Breaking the paywall between Western medical research and the Oromo communities it was written about.
         </p>
@@ -76,11 +95,12 @@ export default function Landing() {
         <p className="animate-fade-up-2" style={{
           fontSize: 'clamp(14px, 1.8vw, 18px)', color: R, fontWeight: 600,
           maxWidth: 580, lineHeight: 1.6, marginBottom: 40,
+          position: 'relative', zIndex: 3,
         }}>
           Research Translation Initiative | 38 University Partners | 2.2M+ Community Reach
         </p>
 
-        <div className="animate-fade-up-2" style={{ display: 'flex', gap: 32, justifyContent: 'center', marginBottom: 40, flexWrap: 'wrap' }}>
+        <div className="animate-fade-up-2" style={{ display: 'flex', gap: 32, justifyContent: 'center', marginBottom: 40, flexWrap: 'wrap', position: 'relative', zIndex: 3 }}>
           {[
             { n: '38', l: 'University Partners' },
             { n: '2.2M+', l: 'Community Reach' },
@@ -92,7 +112,7 @@ export default function Landing() {
           ))}
         </div>
 
-        <div className="animate-fade-up-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div className="animate-fade-up-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', position: 'relative', zIndex: 3 }}>
           <button onClick={() => nav('/portal')} style={btnPrimary}>Contribute to Research</button>
           <a href="#problem" style={btnSecondary}>Learn More</a>
         </div>
@@ -351,7 +371,17 @@ export default function Landing() {
       </section>
 
       {/* ── COMMUNITY & MEDIA PARTNERS ── */}
-      <section style={{ ...sectionStyle, borderTop: '1px solid #E8E4DF', background: '#FFF8F0' }}>
+      <section style={{ 
+        ...sectionStyle, 
+        borderTop: '1px solid #E8E4DF', 
+        background: `
+          linear-gradient(135deg, rgba(255,248,240,0.96) 0%, rgba(255,245,232,0.94) 100%),
+          linear-gradient(135deg, #90EE90 0%, #FFD700 30%, #FF8C00 70%, #8B4513 100%)
+        `,
+        backgroundAttachment: 'fixed',
+        position: 'relative',
+      }}>
+        <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={sectionLabel}>Community Partners</div>
         <h2 style={h2Style}>Amplifying health knowledge through trusted voices</h2>
         <p style={pStyle}>OHKB works with established Oromo health educators and media organizations who reach millions. Together we translate, verify, and distribute health knowledge directly to communities who need it most.</p>
@@ -391,6 +421,7 @@ export default function Landing() {
               </div>
             </a>
           ))}
+        </div>
         </div>
       </section>
 
