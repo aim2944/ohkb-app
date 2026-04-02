@@ -90,13 +90,24 @@ export default function Registry() {
       {/* Results */}
       {!ready && <div style={{ textAlign: 'center', padding: 60, color: '#999' }}>Loading registry…</div>}
 
-      {ready && filtered.length === 0 && (
+      {ready && docs.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '80px 24px', color: '#111' }}>
+          <div style={{ fontSize: 48, marginBottom: 20, fontFamily: "'Instrument Serif', serif" }}>📅</div>
+          <div style={{ fontSize: 24, fontWeight: 700, marginBottom: 16, fontFamily: "'Instrument Serif', serif" }}>Registry Launches April 20th</div>
+          <p style={{ fontSize: 16, color: '#555', maxWidth: 500, margin: '0 auto 24px', lineHeight: 1.6 }}>
+            The complete Student Contributions Registry will be released on <strong>April 20, 2026</strong> and presented across all partner universities during the following weeks.
+          </p>
+          <p style={{ fontSize: 14, color: '#999', fontStyle: 'italic' }}>
+            Submit your contributions now through the Translation Engine. All verified submissions will appear in the registry at launch.
+          </p>
+        </div>
+      )}
+
+      {ready && docs.length > 0 && filtered.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px 24px', color: '#999' }}>
           <div style={{ fontSize: 36, marginBottom: 12 }}>◉</div>
-          {docs.length === 0
-            ? <><div style={{ fontSize: 16, fontWeight: 600, color: '#555', marginBottom: 8 }}>Registry is empty</div><p>Be the first to submit a verified research contribution.</p></>
-            : <><div style={{ fontSize: 16, fontWeight: 600, color: '#555', marginBottom: 8 }}>No results found</div><p>Try a different search term or category.</p></>
-          }
+          <div style={{ fontSize: 16, fontWeight: 600, color: '#555', marginBottom: 8 }}>No results found</div>
+          <p>Try a different search term or university.</p>
         </div>
       )}
 

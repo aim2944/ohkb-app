@@ -23,6 +23,9 @@ export default function SubmitAudit() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (!title.trim()) { setError('Please enter a title for this contribution.'); return }
+    if (!sourceLink.trim()) { setError('Please provide a source link or DOI.'); return }
+    if (!author.trim()) { setError('Please enter the researcher/translator name.'); return }
+    if (!pending?.university || pending.university === '— Select Your University —') { setError('Please select your university.'); return }
     if (!pending) { setError('No translation data found. Please translate a document first.'); return }
 
     setSub(true)
@@ -131,14 +134,14 @@ export default function SubmitAudit() {
           </div>
 
           <div style={{ marginBottom: 18 }}>
-            <label style={labelStyle}>Source Link / DOI (optional)</label>
+            <label style={labelStyle}>Source Link / DOI <span style={{ color: R }}>*</span></label>
             <input value={sourceLink} onChange={e => setLink(e.target.value)}
               placeholder="https://pubmed.ncbi.nlm.nih.gov/..."
-              style={inputStyle} />
+              style={inputStyle} required />
           </div>
 
           <div style={{ marginBottom: 4 }}>
-            <label style={labelStyle}>Researcher / Translator Name</label>
+            <label style={labelStyle}>Researcher / Translator Name <span style={{ color: R }}>*</span></label>
             <input value={author} onChange={e => setAuthor(e.target.value)}
               placeholder="Your full name"
               style={inputStyle} />
