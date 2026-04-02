@@ -112,9 +112,32 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Co-Authorship Eligibility Tracker */}
+      <div style={{ background: '#F0F8FF', border: '1px solid #B0D4FF', borderRadius: 14, padding: '28px', marginBottom: 40 }}>
+        <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, marginBottom: 4 }}>📋 Co-Authorship Eligibility</h2>
+        <p style={{ fontSize: 13, color: '#555', marginBottom: 20 }}>ICMJE criteria for journal co-authorship. Requires substantive analysis + manuscript contribution.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div style={{ background: 'white', borderRadius: 10, padding: '16px' }}>
+            <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Publication Papers</div>
+            <div style={{ fontSize: 32, color: '#0066CC', fontWeight: 700 }}>{publicationDocs.length}</div>
+            <div style={{ fontSize: 11, color: '#999', marginTop: 6 }}>Target: 1+ paper minimum</div>
+          </div>
+          <div style={{ background: 'white', borderRadius: 10, padding: '16px' }}>
+            <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Publication Hours</div>
+            <div style={{ fontSize: 32, color: '#0066CC', fontWeight: 700 }}>{publicationHours}</div>
+            <div style={{ fontSize: 11, color: '#999', marginTop: 6 }}>All words count equally</div>
+          </div>
+          <div style={{ background: 'white', borderRadius: 10, padding: '16px' }}>
+            <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Status</div>
+            <div style={{ fontSize: 24, marginTop: 6 }}>{publicationDocs.length > 0 ? '✓ Eligible' : '○ In Progress'}</div>
+            <div style={{ fontSize: 11, color: '#999', marginTop: 6 }}>Pending expert review</div>
+          </div>
+        </div>
+      </div>
+
       {/* Publication Tracker */}
       {publicationDocs.length > 0 && (
-        <div style={{ background: '#FFF8F0', border: '1px solid #FFD8A8', borderRadius: 14, padding: '28px' }}>
+        <div style={{ background: '#FFF8F0', border: '1px solid #FFD8A8', borderRadius: 14, padding: '28px', marginBottom: 40 }}>
           <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, marginBottom: 4 }}>📚 Publication Track Progress</h2>
           <p style={{ fontSize: 13, color: '#666', marginBottom: 20 }}>Materials ready for review synthesis or co-authored publication</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
