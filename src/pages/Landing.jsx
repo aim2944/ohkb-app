@@ -68,14 +68,95 @@ export default function Landing() {
 
         <p className="animate-fade-up-2" style={{
           fontSize: 'clamp(16px, 2vw, 20px)', color: '#555',
-          maxWidth: 580, lineHeight: 1.6, marginBottom: 40, fontWeight: 300,
+          maxWidth: 580, lineHeight: 1.6, marginBottom: 16, fontWeight: 300,
         }}>
           Breaking the paywall between Western medical research and the Oromo communities it was written about.
         </p>
 
+        <p className="animate-fade-up-2" style={{
+          fontSize: 'clamp(14px, 1.8vw, 18px)', color: R, fontWeight: 600,
+          maxWidth: 580, lineHeight: 1.6, marginBottom: 40,
+        }}>
+          Research Translation Initiative | 38 University Partners | 2.2M+ Community Reach
+        </p>
+
+        <div className="animate-fade-up-2" style={{ display: 'flex', gap: 32, justifyContent: 'center', marginBottom: 40, flexWrap: 'wrap' }}>
+          {[
+            { n: '38', l: 'University Partners' },
+            { n: '2.2M+', l: 'Community Reach' },
+            { n: '3', l: 'Community Partners' },
+          ].map(s => (
+            <div key={s.l} style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 28, color: R, lineHeight: 1, marginBottom: 4, fontWeight: 700 }}>{s.n}</div>
+              <div style={{ fontSize: 12, color: '#555', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
         <div className="animate-fade-up-3" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button onClick={() => nav('/portal')} style={btnPrimary}>Enter the Portal</button>
+          <button onClick={() => nav('/portal')} style={btnPrimary}>Contribute to Research</button>
           <a href="#problem" style={btnSecondary}>Learn More</a>
+        </div>
+      </section>
+
+      {/* ── PUBLICATION PIPELINE ── */}
+      <section style={{ ...sectionStyle, background: '#FFF8F0', borderTop: '1px solid #E8E4DF' }}>
+        <div style={sectionLabel}>How It Leads to Publication</div>
+        <h2 style={h2Style}>From Translation to Peer-Reviewed Research</h2>
+        <p style={pStyle}>Student translations feed directly into a publication pipeline. Early contributors position themselves as named co-authors on research that reaches thousands of health workers and students across Oromia.</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 24, marginTop: 48 }} className="pipeline-grid">
+          {[
+            {
+              step: 1,
+              title: 'Student Translates',
+              desc: 'You translate medical research into Afaan Oromo. Word counts and timestamps are recorded.',
+              icon: '✎'
+            },
+            {
+              step: 2,
+              title: 'Expert Review',
+              desc: 'Bilingual clinicians and researchers verify accuracy. Dr. Ibro Mengitsu (Mattu University) oversees quality.',
+              icon: '✓'
+            },
+            {
+              step: 3,
+              title: 'Synthesis & Analysis',
+              desc: 'Top translations become part of a systematic review or evidence synthesis for publication.',
+              icon: '🔬'
+            },
+            {
+              step: 4,
+              title: 'Manuscript & Authorship',
+              desc: 'Selected contributors named as co-authors. Manuscript submitted to peer-reviewed journals.',
+              icon: '📚'
+            },
+            {
+              step: 5,
+              title: 'Published & Distributed',
+              desc: 'Published papers shared through Oromo Health Academy (2.2M+ viewers), OMN, and community partners.',
+              icon: '▶'
+            },
+          ].map((p, i) => (
+            <div key={i} style={{ background: 'white', border: '1px solid #FFD8A8', borderRadius: 14, padding: 24, textAlign: 'center', transition: 'box-shadow 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 24px rgba(187,0,0,0.08)'}
+              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
+              <div style={{ fontSize: 40, marginBottom: 12, lineHeight: 1 }}>{p.icon}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: R, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>Step {p.step}</div>
+              <h4 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 8 }}>{p.title}</h4>
+              <p style={{ fontSize: 14, color: '#555', lineHeight: 1.5, margin: 0 }}>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 48, background: 'white', border: `2px solid ${R}`, borderRadius: 14, padding: 32, textAlign: 'center' }}>
+          <h3 style={{ fontSize: 20, fontWeight: 700, color: '#111', marginBottom: 12 }}>Current Status</h3>
+          <p style={{ fontSize: 16, color: '#555', lineHeight: 1.6, margin: '0 0 16px 0' }}>
+            <strong>2 manuscripts in development</strong> drawing from student translations.
+          </p>
+          <p style={{ fontSize: 14, color: '#777', margin: 0, fontStyle: 'italic' }}>
+            Early contributors are positioned as named co-authors. Publications expected Q2-Q3 2026.
+          </p>
         </div>
       </section>
 
@@ -132,8 +213,8 @@ export default function Landing() {
       {/* ── LEGITIMATE HOURS ── */}
       <section style={{ ...sectionStyle, borderTop: '1px solid #E8E4DF', background: '#FFF8F0' }}>
         <div style={sectionLabel}>Your Resume</div>
-        <h2 style={h2Style}>How these hours count for applications</h2>
-        <p style={pStyle}>Medical and graduate school admissions committees verify claimed experience carefully. Here's exactly how your OHKB contribution translates to documented hours for your CV.</p>
+        <h2 style={h2Style}>What your participation means for your CV</h2>
+        <p style={pStyle}>Medical and graduate school admissions committees verify claimed experience carefully. Here's exactly what you can document through OHKB participation.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 48 }} className="hours-grid">
           {[
@@ -157,12 +238,12 @@ export default function Landing() {
             },
             {
               icon: '📚',
-              title: 'Publication Track',
-              hours: 'Full authorship on journal submission',
-              what: 'Co-author a systematic review or research synthesis?',
-              credit: 'Named author on published paper.',
-              qualify: 'Perform analysis + co-author publication + meet ICMJE criteria',
-              tip: 'Must contribute to conception, analysis, and manuscript writing',
+              title: 'Co-Authorship Track',
+              hours: 'Named author on peer-reviewed publication',
+              what: 'Contribute to analysis and manuscript writing?',
+              credit: 'Co-authorship on published paper.',
+              qualify: 'Complete full publication pipeline + meet ICMJE criteria',
+              tip: 'Early contributors positioned as authors. Publications Q2-Q3 2026.',
             },
           ].map((h, i) => (
             <div key={i} style={{ background: 'white', border: '1px solid #FFD8A8', borderRadius: 12, padding: 24 }}>
