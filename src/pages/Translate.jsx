@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react'
 import { PortalCtx } from './Portal'
-import { translateDocument } from '../lib/translate'
 import { useNavigate } from 'react-router-dom'
 
 const R = '#BB0000'
@@ -67,55 +66,59 @@ export default function Translate() {
   const { setPending } = useContext(PortalCtx)
   const nav = useNavigate()
 
-  const [text, setText]           = useState('')
-  const [direction, setDirection] = useState('en_or')
-  const [sourceType, setSourceType] = useState('Research Paper')
-  const [contributionType, setContributionType] = useState('community')
   const [translatorName, setName] = useState('')
   const [university, setUniversity] = useState('')
-  const [loading, setLoading]     = useState(false)
-  const [error, setError]         = useState('')
-  const [result, setResult]       = useState(null)
-
-  async function handleTranslate() {
-    setError('')
-    setResult(null)
-    setLoading(true)
-    try {
-      const data = await translateDocument({ text, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous' })
-      setResult(data)
-    } catch (e) {
-      setError(e.message || 'Translation failed. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [sourceType, setSourceType] = useState('Research Paper')
+  const [contributionType, setContributionType] = useState('community')
+  const [translatedText, setTranslatedText] = useState('')
 
   function handleSubmit() {
-    if (!result) return
-    setPending({ ...result, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous', contributionType, university })
+    if (!translatedText.trim() || !university) {
+      alert('Please provide both a translated document and select your university.')
+      return
+    }
+    setPending({
+      fullTranslation: translatedText,
+      translatorName: translatorName.trim() || 'Anonymous',
+      sourceType,
+      contributionType,
+      university
+    })
     nav('/portal/submit')
   }
 
   return (
-    <div style={{ padding: '40px 48px', maxWidth: 960, margin: '0 auto' }} className="translate-pad">
+    <div style={{ padding: '40px 48px', maxWidth: 1200, margin: '0 auto' }} className="translate-pad">
 
       <div style={{ marginBottom: 36 }}>
         <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: R, marginBottom: 8 }}>Translation Engine</div>
         <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Afaan Oromo Medical Translator</h1>
-        <p style={{ color: '#555', fontSize: 16 }}>Full document translation for research papers, clinical documents, and health education materials.</p>
+        <p style={{ color: '#555', fontSize: 16 }}>Use the embedded translator below, then paste your translation and complete your contribution information.</p>
       </div>
 
-      {/* Input panel */}
+      {/* Translator iframe */}
+      <div style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 14, padding: 0, marginBottom: 24, overflow: 'hidden' }}>
+        <iframe
+          src="https://oromotoenglish.com/translator?sl=English&tl=Oromo"
+          style={{
+            width: '100%',
+            height: '600px',
+            border: 'none',
+            borderRadius: '14px'
+          }}
+          title="Oromo to English Translator"
+        />
+      </div>
+
+      {/* Contribution form */}
       <div style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 14, padding: 28, marginBottom: 24 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 20 }} className="input-row">
-          {/* Direction */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }} className="input-row">
+          {/* Translator name */}
           <div>
-            <label style={labelStyle}>Translation Direction</label>
-            <select value={direction} onChange={e => setDirection(e.target.value)} style={selectStyle}>
-              <option value="en_or">English → Afaan Oromo</option>
-              <option value="or_en">Afaan Oromo → English</option>
-            </select>
+            <label style={labelStyle}>Your Name (for attribution)</label>
+            <input value={translatorName} onChange={e => setName(e.target.value)}
+              placeholder="e.g. Aimon Ibssa"
+              style={{ ...selectStyle, outline: 'none' }} />
           </div>
 
           {/* Source type */}
@@ -124,14 +127,6 @@ export default function Translate() {
             <select value={sourceType} onChange={e => setSourceType(e.target.value)} style={selectStyle}>
               {SOURCE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
-          </div>
-
-          {/* Translator name */}
-          <div>
-            <label style={labelStyle}>Your Name (for attribution)</label>
-            <input value={translatorName} onChange={e => setName(e.target.value)}
-              placeholder="e.g. Aimon Ibssa"
-              style={{ ...selectStyle, outline: 'none' }} />
           </div>
         </div>
 
@@ -154,70 +149,33 @@ export default function Translate() {
           </p>
         </div>
 
-        <label style={labelStyle}>Paste Full Document Text (up to 5+ pages)</label>
+        <label style={labelStyle}>Paste Your Translation Here *</label>
         <textarea
-          value={text}
-          onChange={e => setText(e.target.value)}
-          placeholder="Paste the complete text of the medical document, research paper, or clinical note here. Support for up to 5+ pages. Do not summarize — paste the full document for complete translation."
-          rows={30}
+          value={translatedText}
+          onChange={e => setTranslatedText(e.target.value)}
+          placeholder="Copy your translated text from the translator tool above and paste it here."
+          rows={20}
           style={{
             width: '100%', border: '1px solid #E8E4DF', borderRadius: 8, padding: '14px 16px',
             fontSize: 15, lineHeight: 1.6, resize: 'vertical', fontFamily: "'Outfit', sans-serif",
-            outline: 'none', background: '#FAFAFA', color: '#111', minHeight: '400px',
+            outline: 'none', background: '#FAFAFA', color: '#111', minHeight: '300px',
           }}
         />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
-          <span style={{ fontSize: 13, color: '#999' }}>
-            {text.trim() ? `${text.trim().split(/\s+/).length} words · est. ${(text.trim().split(/\s+/).length / 1000).toFixed(2)} contribution hours` : 'Paste document text above'}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
           <button
-            onClick={handleTranslate}
-            disabled={!text.trim() || loading}
+            onClick={handleSubmit}
+            disabled={!translatedText.trim() || !university}
             style={{
-              background: !text.trim() || loading ? '#ddd' : R,
-              color: !text.trim() || loading ? '#999' : 'white',
+              background: !translatedText.trim() || !university ? '#ddd' : R,
+              color: !translatedText.trim() || !university ? '#999' : 'white',
               border: 'none', borderRadius: 8, padding: '12px 28px',
-              fontWeight: 700, fontSize: 15, cursor: !text.trim() || loading ? 'not-allowed' : 'pointer',
+              fontWeight: 700, fontSize: 15, cursor: !translatedText.trim() || !university ? 'not-allowed' : 'pointer',
               fontFamily: "'Outfit', sans-serif", transition: 'background 0.2s',
             }}>
-            {loading ? 'Translating…' : '⟺ Translate Document'}
+            ✦ Continue to Submission
           </button>
         </div>
       </div>
-
-      {/* Error */}
-      {error && (
-        <div style={{ background: '#FFE8E8', border: '1px solid #FFBBBB', borderRadius: 10, padding: '16px 20px', marginBottom: 24, color: '#8B0000', fontSize: 14 }}>
-          ⚠ {error}
-        </div>
-      )}
-
-      {/* Loading shimmer */}
-      {loading && (
-        <div style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 14, padding: 28, textAlign: 'center', color: '#555' }}>
-          <div style={{ fontSize: 32, marginBottom: 16 }}>⟺</div>
-          <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Translating document…</div>
-          <p style={{ fontSize: 14, color: '#999', margin: 0 }}>Claude is performing a full medical translation with terminology analysis. This may take 20–60 seconds for longer documents.</p>
-        </div>
-      )}
-
-      {/* Results */}
-      {result && !loading && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 24 }}>Translation Complete</h2>
-            <button onClick={handleSubmit}
-              style={{ background: R, color: 'white', border: 'none', borderRadius: 8, padding: '10px 22px', fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: "'Outfit', sans-serif" }}>
-              ✦ Submit Verified Research Contribution
-            </button>
-          </div>
-
-          <ResultCard icon="⟺" title="Full Translation" content={result.fullTranslation} accent />
-          <ResultCard icon="📋" title="Terminology / Translation Notes" content={result.terminologyNotes} />
-          <ResultCard icon="🔍" title="Reviewer Verification Notes" content={result.reviewerVerification} />
-          <ResultCard icon="◈" title="Research / Contribution Metadata" content={result.researchMetadata} highlight />
-        </div>
-      )}
 
       <style>{`
         @media (max-width: 768px) {
