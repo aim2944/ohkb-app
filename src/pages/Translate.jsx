@@ -154,16 +154,16 @@ export default function Translate() {
           </p>
         </div>
 
-        <label style={labelStyle}>Paste Full Document Text</label>
+        <label style={labelStyle}>Paste Full Document Text (up to 5+ pages)</label>
         <textarea
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder="Paste the full text of the medical document, research paper, or clinical note here. Do not summarize — paste the complete text for full translation."
-          rows={12}
+          placeholder="Paste the complete text of the medical document, research paper, or clinical note here. Support for up to 5+ pages. Do not summarize — paste the full document for complete translation."
+          rows={30}
           style={{
             width: '100%', border: '1px solid #E8E4DF', borderRadius: 8, padding: '14px 16px',
             fontSize: 15, lineHeight: 1.6, resize: 'vertical', fontFamily: "'Outfit', sans-serif",
-            outline: 'none', background: '#FAFAFA', color: '#111',
+            outline: 'none', background: '#FAFAFA', color: '#111', minHeight: '400px',
           }}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
