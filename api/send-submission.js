@@ -4,29 +4,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { title, author, university, wordCount, estimatedHours, sourceType, direction, contributionType, timestamp } = req.body
+    // Submission is already saved to Firestore in SubmitAudit.jsx
+    // This endpoint can log/track the submission if needed
+    const { title, author, university, timestamp } = req.body
 
-    // Log submission for now (in production, integrate with email service)
     console.log('Submission received:', {
       title,
       author,
       university,
-      wordCount,
-      estimatedHours,
-      sourceType,
-      direction,
-      contributionType,
       timestamp
     })
 
-    // TODO: Send email to aimonibssa@gmail.com using Resend, SendGrid, or similar
-    // For now, just acknowledge receipt
     res.status(200).json({
       success: true,
-      message: 'Submission logged. Email notification pending.'
+      message: 'Submission logged'
     })
   } catch (error) {
     console.error('Error processing submission:', error)
-    res.status(500).json({ error: 'Failed to process submission' })
+    res.status(500).json({
+      success: false,
+      error: 'Failed to process submission'
+    })
   }
 }

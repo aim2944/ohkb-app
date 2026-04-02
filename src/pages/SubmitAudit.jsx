@@ -65,7 +65,22 @@ export default function SubmitAudit() {
         await fetch('/api/send-submission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...submissionData, timestamp: new Date().toISOString() })
+          body: JSON.stringify({
+            title: submissionData.title,
+            author: submissionData.author,
+            university: submissionData.university,
+            wordCount: submissionData.wordCount,
+            estimatedHours: submissionData.estimatedHours,
+            sourceType: submissionData.sourceType,
+            direction: submissionData.direction,
+            contributionType: submissionData.contributionType,
+            sourceLink: submissionData.sourceLink,
+            fullTranslation: submissionData.fullTranslation,
+            terminologyNotes: submissionData.terminologyNotes,
+            reviewerVerification: submissionData.reviewerVerification,
+            researchMetadata: submissionData.researchMetadata,
+            timestamp: new Date().toISOString()
+          })
         })
       } catch (emailErr) {
         console.error('Email notification failed:', emailErr)
@@ -83,20 +98,60 @@ export default function SubmitAudit() {
 
   if (success) {
     return (
-      <div style={{ padding: '80px 48px', maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ fontSize: 48, marginBottom: 20 }}>✦</div>
-        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 16 }}>Contribution Logged</h1>
-        <p style={{ color: '#555', fontSize: 16, lineHeight: 1.6, marginBottom: 32 }}>
-          Your verified research contribution has been added to the Global Research Registry. Your contribution hours have been recorded to your dashboard.
-        </p>
+      <div style={{ padding: '80px 48px', maxWidth: 700, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <div style={{ fontSize: 48, marginBottom: 20 }}>✦</div>
+          <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 16 }}>Ready to Submit</h1>
+          <p style={{ color: '#555', fontSize: 16, lineHeight: 1.6 }}>
+            Your translation is complete. Now submit your full contribution to Dr. Ibro Mengitsu for publication approval.
+          </p>
+        </div>
+
+        <div style={{ background: '#FFF0E8', border: '1px solid #FFBBA8', borderRadius: 14, padding: 24, marginBottom: 32 }}>
+          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: '#111' }}>📧 Email Your Full Contribution</h2>
+          <p style={{ fontSize: 14, color: '#333', marginBottom: 20, lineHeight: 1.6 }}>
+            Send your complete contribution as a <strong>PDF</strong> to <strong style={{ color: R }}>aimonibssa@gmail.com</strong>
+          </p>
+
+          <div style={{ background: 'white', borderRadius: 8, padding: 16, fontFamily: "'Outfit', sans-serif", fontSize: 13, lineHeight: 1.8, color: '#555', marginBottom: 20, border: '1px solid #FFD8B8' }}>
+            <div style={{ fontWeight: 700, marginBottom: 12, color: '#111' }}>Email Template:</div>
+            <div style={{ marginBottom: 12 }}>
+              <strong>Subject:</strong><br />
+              <code style={{ background: '#f5f5f5', padding: '4px 8px', borderRadius: 4 }}>[OHKB] {title}</code>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <strong>Body:</strong><br />
+              Dear Dr. Ibro,<br />
+              <br />
+              Please find attached my full contribution for the research registry.<br />
+              <br />
+              • Title: {title}<br />
+              • University: {pending?.university}<br />
+              • Contribution Type: {pending?.contributionType}<br />
+              • Source: {sourceLink}<br />
+              <br />
+              Thank you for reviewing my submission.
+            </div>
+            <div>
+              <strong>Attachment:</strong> Full_Contribution_{author?.replace(/\s+/g, '_')}.pdf
+            </div>
+          </div>
+
+          <div style={{ background: '#F0F0ED', borderRadius: 8, padding: 12, marginBottom: 0 }}>
+            <p style={{ fontSize: 12, color: '#666', margin: 0, lineHeight: 1.5 }}>
+              <strong>What to include in your PDF:</strong><br />
+              ✓ Full translation<br />
+              ✓ Terminology notes<br />
+              ✓ Source document link<br />
+              ✓ Your name and university
+            </p>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-          <button onClick={() => nav('/portal/registry')}
+          <button onClick={() => nav('/portal/translate')}
             style={{ background: R, color: 'white', border: 'none', borderRadius: 8, padding: '12px 28px', fontWeight: 700, cursor: 'pointer', fontFamily: "'Outfit', sans-serif", fontSize: 15 }}>
-            View Registry
-          </button>
-          <button onClick={() => nav('/portal/dashboard')}
-            style={{ background: 'white', color: '#111', border: '1px solid #E8E4DF', borderRadius: 8, padding: '12px 28px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Outfit', sans-serif", fontSize: 15 }}>
-            Dashboard
+            ← New Translation
           </button>
         </div>
       </div>
@@ -108,8 +163,8 @@ export default function SubmitAudit() {
 
       <div style={{ marginBottom: 36 }}>
         <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, color: R, marginBottom: 8 }}>Research Submission</div>
-        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Submit Verified Research Contribution</h1>
-        <p style={{ color: '#555', fontSize: 16 }}>Log this translation to the Global Research Registry and your contribution dashboard.</p>
+        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 8 }}>Submit Your Contribution</h1>
+        <p style={{ color: '#555', fontSize: 16 }}>Complete the submission details below, then email your full contribution PDF to Dr. Ibro Mengitsu for approval.</p>
       </div>
 
       {!pending && (
@@ -168,44 +223,6 @@ export default function SubmitAudit() {
           </div>
         )}
 
-        {/* How This Counts */}
-        {pending && (
-          <div style={{ background: '#F0F8FF', border: '1px solid #ADD8E6', borderRadius: 14, padding: 24, marginBottom: 20 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 14, color: '#111' }}>💡 How This Contribution Counts</h2>
-            {pending.contributionType === 'community' && (
-              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
-                <p style={{ marginBottom: 12, fontWeight: 600 }}>🤝 Community Service Hours</p>
-                <p style={{ marginBottom: 0 }}>
-                  This translation qualifies as <strong>documented community service</strong> for medical school applications. You can list it on your CV as: "Sourced, translated, and distributed medical research into Afaan Oromo for community education." This is fully appropriate for the "Community Service" section of your application.
-                </p>
-              </div>
-            )}
-            {pending.contributionType === 'research' && (
-              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
-                <p style={{ marginBottom: 12, fontWeight: 600 }}>🔬 Research Hours</p>
-                <p style={{ marginBottom: 0 }}>
-                  This translation counts toward research hours <strong>only if</strong> you are performing analysis (systematic review, implementation science, data synthesis, etc.). Do not claim these as research hours if you are only translating. You must document the methodology and analytical component in your contribution notes or publication.
-                </p>
-              </div>
-            )}
-            {pending.contributionType === 'publication' && (
-              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
-                <p style={{ marginBottom: 12, fontWeight: 600 }}>📚 Publication Track</p>
-                <p style={{ marginBottom: 12 }}>
-                  You are planning to co-author a publication based on this analysis. To qualify for authorship, you must meet all three criteria:
-                </p>
-                <ul style={{ marginLeft: 20, marginBottom: 12 }}>
-                  <li style={{ marginBottom: 8 }}><strong>Substantive Contribution:</strong> You perform analysis beyond translation (systematic review, data synthesis, comparative analysis across papers)</li>
-                  <li style={{ marginBottom: 8 }}><strong>Manuscript Work:</strong> You write, draft, or substantively revise the manuscript — not just provide translations</li>
-                  <li style={{ marginBottom: 0 }}><strong>ICMJE Accountability:</strong> You can defend all aspects of the work and take accountability for its integrity</li>
-                </ul>
-                <p style={{ marginBottom: 0, color: '#666', fontSize: 12 }}>
-                  Discuss authorship criteria explicitly with collaborators using the <a href="https://www.icmje.org/recommendations/browse/roles-and-responsibilities/defining-the-role-of-authors-and-contributors.html" target="_blank" rel="noreferrer" style={{ color: '#BB0000', textDecoration: 'none' }}>ICMJE authorship checklist</a> before manuscript submission.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Academic Integrity Note */}
         <div style={{ background: '#FFF8DC', border: '1px solid #FFEFD5', borderRadius: 14, padding: 24, marginBottom: 24 }}>
@@ -238,7 +255,7 @@ export default function SubmitAudit() {
             border: 'none', borderRadius: 10, padding: '16px', fontWeight: 700, fontSize: 16,
             cursor: submitting || !pending ? 'not-allowed' : 'pointer', fontFamily: "'Outfit', sans-serif",
           }}>
-          {submitting ? 'Submitting…' : '✦ Submit to Global Research Registry'}
+          {submitting ? 'Processing…' : '✦ Complete Submission'}
         </button>
       </form>
 
