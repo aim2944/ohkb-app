@@ -123,6 +123,9 @@ function RegistryCard({ doc }) {
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 }}>
               <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: R, background: '#FFE8E8', padding: '2px 8px', borderRadius: 100 }}>{dirLabel}</span>
+              {doc.contributionType === 'community' && <span style={{ fontSize: 11, color: '#0066CC', background: '#E6F2FF', padding: '2px 8px', borderRadius: 100, fontWeight: 600 }}>🤝 Community Service</span>}
+              {doc.contributionType === 'research' && <span style={{ fontSize: 11, color: '#228B22', background: '#E8F5E9', padding: '2px 8px', borderRadius: 100, fontWeight: 600 }}>🔬 Research</span>}
+              {doc.contributionType === 'publication' && <span style={{ fontSize: 11, color: '#FF9500', background: '#FFF8E8', padding: '2px 8px', borderRadius: 100, fontWeight: 600 }}>📚 Publication Track</span>}
               {doc.category && <span style={{ fontSize: 11, color: '#888', background: '#F4F4F0', padding: '2px 8px', borderRadius: 100 }}>{doc.category}</span>}
               {doc.sourceType && <span style={{ fontSize: 11, color: '#888' }}>{doc.sourceType}</span>}
             </div>

@@ -27,17 +27,31 @@ export default function Dashboard() {
 
   const totalWords     = docs.reduce((a, d) => a + (d.wordCount || 0), 0)
   const totalHours     = (totalWords / 1000).toFixed(1)
+
+  // Separate hours by contribution type
+  const communityDocs  = docs.filter(d => d.contributionType === 'community')
+  const researchDocs   = docs.filter(d => d.contributionType === 'research')
+  const publicationDocs = docs.filter(d => d.contributionType === 'publication')
+
+  const communityWords = communityDocs.reduce((a, d) => a + (d.wordCount || 0), 0)
+  const researchWords  = researchDocs.reduce((a, d) => a + (d.wordCount || 0), 0)
+  const publicationWords = publicationDocs.reduce((a, d) => a + (d.wordCount || 0), 0)
+
+  const communityHours = (communityWords / 1000).toFixed(1)
+  const researchHours  = (researchWords / 1000).toFixed(1)
+  const publicationHours = (publicationWords / 1000).toFixed(1)
+
   const clinicalDocs   = docs.filter(d => d.category === 'Clinical Translation')
-  const researchDocs   = docs.filter(d => d.category === 'Research')
   const phDocs         = docs.filter(d => d.category === 'Public Health Education')
+  const pubHealthHours = (phDocs.reduce((a, d) => a + (d.wordCount || 0), 0) / 1000).toFixed(1)
 
   const stats = [
-    { label: 'Total Contributions',        value: docs.length,               unit: '' },
-    { label: 'Research Contribution Hours', value: totalHours,               unit: 'hrs' },
-    { label: 'Words Translated',            value: totalWords.toLocaleString(), unit: '' },
-    { label: 'Research Translations',       value: researchDocs.length,       unit: '' },
-    { label: 'Clinical Translations',       value: clinicalDocs.length,       unit: '' },
-    { label: 'Public Health Impact Score',  value: Math.round(totalWords / 100), unit: 'pts' },
+    { label: 'Total Contributions', value: docs.length, unit: '', tooltip: 'All translations submitted' },
+    { label: 'Community Service Hours', value: communityHours, unit: 'hrs', tooltip: 'Sourcing, translating, distributing research' },
+    { label: 'Research Contribution Hours', value: researchHours, unit: 'hrs', tooltip: 'Analysis, systematic review, data synthesis' },
+    { label: 'Publication Track Hours', value: publicationHours, unit: 'hrs', tooltip: 'Material for co-authored journal submission' },
+    { label: 'Words Translated', value: totalWords.toLocaleString(), unit: '', tooltip: 'Total across all contributions' },
+    { label: 'Impact Score', value: Math.round(totalWords / 100), unit: 'pts', tooltip: 'Public health education reach' },
   ]
 
   return (
@@ -52,7 +66,7 @@ export default function Dashboard() {
       {/* Stats grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginBottom: 40 }} className="stats-grid">
         {stats.map(s => (
-          <div key={s.label} style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 12, padding: '28px 24px' }}>
+          <div key={s.label} title={s.tooltip} style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 12, padding: '28px 24px', cursor: s.tooltip ? 'help' : 'default' }}>
             <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 38, color: R, lineHeight: 1, marginBottom: 6 }}>
               {ready ? s.value : '—'}{s.unit && <span style={{ fontSize: 16, marginLeft: 4 }}>{s.unit}</span>}
             </div>
@@ -79,7 +93,7 @@ export default function Dashboard() {
 
       {/* Recent contributions */}
       {docs.length > 0 && (
-        <div>
+        <div style={{ marginBottom: 40 }}>
           <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, marginBottom: 20 }}>Recent Contributions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {docs.slice(0, 5).map(d => (
@@ -90,10 +104,32 @@ export default function Dashboard() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: 13, color: R, fontWeight: 600 }}>{((d.wordCount || 0) / 1000).toFixed(2)} hrs</div>
-                  <div style={{ fontSize: 11, color: '#aaa' }}>{d.category}</div>
+                  <div style={{ fontSize: 11, color: '#aaa' }}>{d.contributionType === 'community' ? '🤝 Community Service' : d.contributionType === 'research' ? '🔬 Research' : '📚 Publication Track'}</div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Publication Tracker */}
+      {publicationDocs.length > 0 && (
+        <div style={{ background: '#FFF8F0', border: '1px solid #FFD8A8', borderRadius: 14, padding: '28px' }}>
+          <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, marginBottom: 4 }}>📚 Publication Track Progress</h2>
+          <p style={{ fontSize: 13, color: '#666', marginBottom: 20 }}>Materials ready for review synthesis or co-authored publication</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+            <div style={{ background: 'white', borderRadius: 10, padding: '16px', textAlign: 'center' }}>
+              <div style={{ fontSize: 28, color: '#FF9500', fontWeight: 700, marginBottom: 4 }}>{publicationDocs.length}</div>
+              <div style={{ fontSize: 12, color: '#666' }}>Papers Ready</div>
+            </div>
+            <div style={{ background: 'white', borderRadius: 10, padding: '16px', textAlign: 'center' }}>
+              <div style={{ fontSize: 28, color: '#FF9500', fontWeight: 700, marginBottom: 4 }}>{publicationHours}</div>
+              <div style={{ fontSize: 12, color: '#666' }}>Publication Hours</div>
+            </div>
+            <div style={{ background: 'white', borderRadius: 10, padding: '16px', textAlign: 'center' }}>
+              <div style={{ fontSize: 28, color: '#FF9500', fontWeight: 700, marginBottom: 4 }}>{publicationWords.toLocaleString()}</div>
+              <div style={{ fontSize: 12, color: '#666' }}>Total Words</div>
+            </div>
           </div>
         </div>
       )}

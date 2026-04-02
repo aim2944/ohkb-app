@@ -15,6 +15,12 @@ const SOURCE_TYPES = [
   'General Medical Document',
 ]
 
+const CONTRIBUTION_TYPES = [
+  { value: 'community', label: '🤝 Community Service', desc: 'Sourcing, translating, and distributing research' },
+  { value: 'research', label: '🔬 Research', desc: 'Analysis, systematic review, or data synthesis' },
+  { value: 'publication', label: '📚 Publication Track', desc: 'Systematic analysis + co-authored paper (ICMJE criteria)' },
+]
+
 export default function Translate() {
   const { setPending } = useContext(PortalCtx)
   const nav = useNavigate()
@@ -22,6 +28,7 @@ export default function Translate() {
   const [text, setText]           = useState('')
   const [direction, setDirection] = useState('en_or')
   const [sourceType, setSourceType] = useState('Research Paper')
+  const [contributionType, setContributionType] = useState('community')
   const [translatorName, setName] = useState('')
   const [loading, setLoading]     = useState(false)
   const [error, setError]         = useState('')
@@ -43,7 +50,7 @@ export default function Translate() {
 
   function handleSubmit() {
     if (!result) return
-    setPending({ ...result, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous' })
+    setPending({ ...result, direction, sourceType, translatorName: translatorName.trim() || 'Anonymous', contributionType })
     nav('/portal/submit')
   }
 
@@ -83,6 +90,18 @@ export default function Translate() {
               placeholder="e.g. Aimon Ibssa"
               style={{ ...selectStyle, outline: 'none' }} />
           </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <label style={labelStyle}>How Are You Contributing? *</label>
+          <select value={contributionType} onChange={e => setContributionType(e.target.value)} style={selectStyle}>
+            {CONTRIBUTION_TYPES.map(t => <option key={t.value} value={t.value}>{t.label} — {t.desc}</option>)}
+          </select>
+          <p style={{ fontSize: 12, color: '#999', marginTop: 8 }}>
+            {contributionType === 'community' && '✓ Perfect for volunteer work. Log on med school apps as "Community Service"'}
+            {contributionType === 'research' && '✓ Only if you\'re analyzing/synthesizing multiple papers. Must document methodology'}
+            {contributionType === 'publication' && '✓ Plan to co-author? Must: (1) perform substantive analysis, (2) write/revise manuscript, (3) meet ICMJE criteria'}
+          </p>
         </div>
 
         <label style={labelStyle}>Paste Full Document Text</label>

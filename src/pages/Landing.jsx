@@ -129,6 +129,83 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── LEGITIMATE HOURS ── */}
+      <section style={{ ...sectionStyle, borderTop: '1px solid #E8E4DF', background: '#FFF8F0' }}>
+        <div style={sectionLabel}>Your Resume</div>
+        <h2 style={h2Style}>How these hours count for applications</h2>
+        <p style={pStyle}>Medical and graduate school admissions committees verify claimed experience carefully. Here's exactly how your OHKB contribution translates to documented hours for your CV.</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 48 }} className="hours-grid">
+          {[
+            {
+              icon: '🤝',
+              title: 'Community Service Hours',
+              hours: '1 hour per 1,000 words translated',
+              what: 'Translate a 5,000-word clinical guideline?',
+              credit: '5 hours documented community service.',
+              qualify: 'Sourcing, translating, and distributing research',
+              tip: 'Perfect for medical school "Community Service" section',
+            },
+            {
+              icon: '🔬',
+              title: 'Research Hours',
+              hours: '1 hour per 1,000 words analyzed',
+              what: 'Systematic review of 10 papers totaling 50,000 words?',
+              credit: '50 hours documented research.',
+              qualify: 'Only if performing analysis, synthesis, or review',
+              tip: 'Requires documented methodology — not just translation',
+            },
+            {
+              icon: '📚',
+              title: 'Publication Track',
+              hours: 'Full authorship on journal submission',
+              what: 'Co-author a systematic review or research synthesis?',
+              credit: 'Named author on published paper.',
+              qualify: 'Perform analysis + co-author publication + meet ICMJE criteria',
+              tip: 'Must contribute to conception, analysis, and manuscript writing',
+            },
+          ].map((h, i) => (
+            <div key={i} style={{ background: 'white', border: '1px solid #FFD8A8', borderRadius: 12, padding: 24 }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>{h.icon}</div>
+              <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 2 }}>{h.title}</h4>
+              <div style={{ fontSize: 13, fontWeight: 600, color: R, marginBottom: 12 }}>{h.hours}</div>
+
+              <div style={{ fontSize: 13, color: '#555', lineHeight: 1.6 }}>
+                <p style={{ marginBottom: 8, fontStyle: 'italic' }}><strong>{h.what}</strong></p>
+                <p style={{ marginBottom: 8 }}>✓ {h.credit}</p>
+                <p style={{ marginBottom: 8, color: '#777', fontSize: 12 }}>Qualifies if: {h.qualify}</p>
+                <p style={{ marginBottom: 0, background: '#FFF5E8', padding: '6px 8px', borderRadius: 4, fontSize: 12 }}>💡 {h.tip}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 40, background: '#FFF5E8', border: '1px solid #FFE0CC', borderRadius: 12, padding: 28, marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, color: '#111' }}>📚 Steps to Qualify for Publication Track</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            {[
+              { n: 1, t: 'Perform Analysis', d: 'Systematically review 5+ papers on a focused topic. Document your search strategy, inclusion criteria, and findings.' },
+              { n: 2, t: 'Co-Author Manuscript', d: 'Write a research brief, systematic review, or evidence synthesis. You must contribute substantially to writing, not just translating.' },
+              { n: 3, t: 'Meet ICMJE Criteria', d: 'Confirm you meet journal authorship standards: conception/design, data interpretation, manuscript revision, and accountability.' },
+            ].map(s => (
+              <div key={s.n} style={{ background: 'white', borderRadius: 8, padding: 16, textAlign: 'center', border: '1px solid #FFD8A8' }}>
+                <div style={{ fontWeight: 700, color: '#FF9500', marginBottom: 8 }}>Step {s.n}</div>
+                <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>{s.t}</div>
+                <div style={{ fontSize: 12, color: '#666', lineHeight: 1.5 }}>{s.d}</div>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontSize: 12, color: '#888', marginTop: 16, marginBottom: 0, fontStyle: 'italic' }}>Discuss authorship explicitly with collaborators before submission. Use ICMJE authorship checklist to confirm eligibility.</p>
+        </div>
+
+        <div style={{ marginTop: 0, background: '#FFF', border: '1px solid #FFD8A8', borderRadius: 12, padding: 28 }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12, color: '#111' }}>Academic Integrity &amp; Honesty</h3>
+          <p style={{ fontSize: 15, color: '#555', lineHeight: 1.7, margin: 0 }}>
+            Translation work does not create authorship of the original paper. Be clear about your role when describing contributions on your CV. Admissions committees review these carefully — accuracy strengthens your application. Every contribution you submit to OHKB is logged with verified word counts, timestamps, and metadata to back up exactly what you did.
+          </p>
+        </div>
+      </section>
+
       {/* ── TOPICS ── */}
       <section id="topics" style={{ ...sectionStyle, borderTop: '1px solid #E8E4DF' }}>
         <div style={sectionLabel}>Focus Areas</div>
@@ -205,6 +282,7 @@ export default function Landing() {
           .nav-desktop-links { display: none !important; }
           .nav-mobile-btn    { display: block !important; }
           .stat-grid         { grid-template-columns: 1fr !important; }
+          .hours-grid        { grid-template-columns: 1fr !important; }
           .topic-grid        { grid-template-columns: 1fr !important; }
           .benefit-grid      { grid-template-columns: 1fr !important; }
         }

@@ -44,6 +44,7 @@ export default function SubmitAudit() {
         author:               author.trim() || 'Anonymous',
         direction:            pending.direction,
         sourceType:           pending.sourceType,
+        contributionType:     pending.contributionType || 'community',
         wordCount,
         estimatedHours:       parseFloat((wordCount / 1000).toFixed(2)),
         category,
@@ -147,6 +148,64 @@ export default function SubmitAudit() {
             </div>
           </div>
         )}
+
+        {/* How This Counts */}
+        {pending && (
+          <div style={{ background: '#F0F8FF', border: '1px solid #ADD8E6', borderRadius: 14, padding: 24, marginBottom: 20 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 14, color: '#111' }}>💡 How This Contribution Counts</h2>
+            {pending.contributionType === 'community' && (
+              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
+                <p style={{ marginBottom: 12, fontWeight: 600 }}>🤝 Community Service Hours</p>
+                <p style={{ marginBottom: 0 }}>
+                  This translation qualifies as <strong>documented community service</strong> for medical school applications. You can list it on your CV as: "Sourced, translated, and distributed medical research into Afaan Oromo for community education." This is fully appropriate for the "Community Service" section of your application.
+                </p>
+              </div>
+            )}
+            {pending.contributionType === 'research' && (
+              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
+                <p style={{ marginBottom: 12, fontWeight: 600 }}>🔬 Research Hours</p>
+                <p style={{ marginBottom: 0 }}>
+                  This translation counts toward research hours <strong>only if</strong> you are performing analysis (systematic review, implementation science, data synthesis, etc.). Do not claim these as research hours if you are only translating. You must document the methodology and analytical component in your contribution notes or publication.
+                </p>
+              </div>
+            )}
+            {pending.contributionType === 'publication' && (
+              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#333' }}>
+                <p style={{ marginBottom: 12, fontWeight: 600 }}>📚 Publication Track</p>
+                <p style={{ marginBottom: 12 }}>
+                  You are planning to co-author a publication based on this analysis. To qualify for authorship, you must meet all three criteria:
+                </p>
+                <ul style={{ marginLeft: 20, marginBottom: 12 }}>
+                  <li style={{ marginBottom: 8 }}><strong>Substantive Contribution:</strong> You perform analysis beyond translation (systematic review, data synthesis, comparative analysis across papers)</li>
+                  <li style={{ marginBottom: 8 }}><strong>Manuscript Work:</strong> You write, draft, or substantively revise the manuscript — not just provide translations</li>
+                  <li style={{ marginBottom: 0 }}><strong>ICMJE Accountability:</strong> You can defend all aspects of the work and take accountability for its integrity</li>
+                </ul>
+                <p style={{ marginBottom: 0, color: '#666', fontSize: 12 }}>
+                  Discuss authorship criteria explicitly with collaborators using the <a href="https://www.icmje.org/recommendations/browse/roles-and-responsibilities/defining-the-role-of-authors-and-contributors.html" target="_blank" rel="noreferrer" style={{ color: '#BB0000', textDecoration: 'none' }}>ICMJE authorship checklist</a> before manuscript submission.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Academic Integrity Note */}
+        <div style={{ background: '#FFF8DC', border: '1px solid #FFEFD5', borderRadius: 14, padding: 24, marginBottom: 24 }}>
+          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 14, color: '#111' }}>⚖️ Academic Integrity Note</h2>
+          <div style={{ fontSize: 13, lineHeight: 1.7, color: '#444' }}>
+            <p style={{ marginBottom: 12 }}>
+              <strong>Translation work does not create authorship of the original paper.</strong> You are translating existing research, not conducting your own study. When referencing this contribution in applications or your CV:
+            </p>
+            <ul style={{ marginLeft: 20, marginBottom: 12 }}>
+              <li style={{ marginBottom: 8 }}>Do not claim you are an author of the original research.</li>
+              <li style={{ marginBottom: 8 }}>Be clear about your role: "Translator" or "Translation contributor," not "Author."</li>
+              <li style={{ marginBottom: 8 }}>If you performed analysis (e.g., systematic review of multiple papers), document that explicitly.</li>
+              <li style={{ marginBottom: 0 }}>If you plan to co-author a publication based on these translations, discuss authorship criteria with your collaborators using standard guidelines (e.g., ICMJE).</li>
+            </ul>
+            <p style={{ marginBottom: 0, fontWeight: 600 }}>
+              Medical school admissions committees review these claims carefully. Accurate representation strengthens your application.
+            </p>
+          </div>
+        </div>
 
         {error && (
           <div style={{ background: '#FFE8E8', border: '1px solid #FFBBBB', borderRadius: 10, padding: '14px 18px', marginBottom: 20, color: '#8B0000', fontSize: 14 }}>
