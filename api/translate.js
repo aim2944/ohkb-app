@@ -75,26 +75,35 @@ export default async function handler(req, res) {
     const sourceLang = direction === 'en_or' ? 'en' : 'or'
     const targetLang = direction === 'en_or' ? 'or' : 'en'
 
-    // Note: MyMemory has limitations with Oromo. For production, consider Google Translate API free tier
-    // or other services. For now, we'll provide a template-based approach with manual note generation
+    // No character limits - supports full 5+ page documents
     const wordCount = text.trim().split(/\s+/).length
 
-    // Split text into chunks (MyMemory has character limits)
+    // Split text into sentence chunks (respects sentence boundaries)
     const chunks = []
-    const chunkSize = 4000
-    for (let i = 0; i < text.length; i += chunkSize) {
-      chunks.push(text.slice(i, i + chunkSize))
-    }
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text]
+    let currentChunk = ''
 
-    // Attempt translation
+    for (const sentence of sentences) {
+      if ((currentChunk + sentence).length > 3000) {
+        if (currentChunk) chunks.push(currentChunk.trim())
+        currentChunk = sentence
+      } else {
+        currentChunk += sentence
+      }
+    }
+    if (currentChunk) chunks.push(currentChunk.trim())
+
+    // Attempt translation - unlimited document support
     let fullTranslation = ''
     for (const chunk of chunks) {
       try {
-        const translated = await translateWithMyMemory(chunk, sourceLang, targetLang)
-        fullTranslation += translated + '\n'
+        if (chunk.trim()) {
+          const translated = await translateWithMyMemory(chunk, sourceLang, targetLang)
+          fullTranslation += translated + ' '
+        }
       } catch (err) {
         console.warn('Chunk translation failed, using original:', err)
-        fullTranslation += chunk + '\n'
+        if (chunk.trim()) fullTranslation += chunk + ' '
       }
     }
 
