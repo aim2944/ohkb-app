@@ -270,6 +270,50 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── COMMUNITY & MEDIA PARTNERS ── */}
+      <section style={{ ...sectionStyle, borderTop: '1px solid #E8E4DF', background: '#FFF8F0' }}>
+        <div style={sectionLabel}>Community Partners</div>
+        <h2 style={h2Style}>Amplifying health knowledge through trusted voices</h2>
+        <p style={pStyle}>OHKB works with established Oromo health educators and media organizations who reach millions. Together we translate, verify, and distribute health knowledge directly to communities who need it most.</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 48 }} className="community-partners-grid">
+          {[
+            {
+              icon: '▶️',
+              name: 'Oromo Health Academy',
+              desc: 'Leading health education channel reaching 2.2M+ viewers',
+              impact: 'Millions learned through verified health content',
+              link: 'https://www.youtube.com/channel/UCgrgrS04v-RbLSmfCJ5AhDQ'
+            },
+            {
+              icon: '📡',
+              name: 'OMN (Oromo Media Network)',
+              desc: 'Pan-African media platform serving Oromo diaspora',
+              impact: 'Nationwide broadcast reach and distribution',
+              link: '#'
+            },
+            {
+              icon: '🤝',
+              name: 'Odaa of United States',
+              desc: 'Community leadership organization across US chapters',
+              impact: 'Trusted grassroots delivery to local communities',
+              link: '#'
+            },
+          ].map(p => (
+            <a key={p.name} href={p.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{ background: 'white', border: '1px solid #FFD8A8', borderRadius: 12, padding: 24, height: '100%', cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = R; e.currentTarget.style.boxShadow = '0 4px 12px rgba(187,0,0,0.1)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#FFD8A8'; e.currentTarget.style.boxShadow = 'none' }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>{p.icon}</div>
+                <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6, color: '#111' }}>{p.name}</h4>
+                <p style={{ fontSize: 13, color: '#555', marginBottom: 12, lineHeight: 1.5 }}>{p.desc}</p>
+                <div style={{ fontSize: 12, fontWeight: 600, color: R }}>{p.impact}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* ── UNIVERSITY PARTNERS ── */}
       <section style={sectionStyle}>
         <div style={sectionLabel}>Our Partners</div>
@@ -361,6 +405,7 @@ export default function Landing() {
           .hours-grid        { grid-template-columns: 1fr !important; }
           .topic-grid        { grid-template-columns: 1fr !important; }
           .benefit-grid      { grid-template-columns: 1fr !important; }
+          .community-partners-grid { grid-template-columns: 1fr !important; }
           .university-grid   { grid-template-columns: 1fr !important; }
         }
       `}</style>
