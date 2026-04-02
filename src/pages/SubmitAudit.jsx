@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { PortalCtx } from './Portal'
 import { useNavigate } from 'react-router-dom'
 
@@ -39,7 +38,7 @@ const METADATA_COMPONENTS = [
 ]
 
 export default function SubmitAudit() {
-  const { user, db, pending, setPending } = useContext(PortalCtx)
+  const { pending } = useContext(PortalCtx)
   const nav = useNavigate()
 
   const [sourceTitle, setSourceTitle]     = useState('')
@@ -53,148 +52,78 @@ export default function SubmitAudit() {
   const [geoRelevance, setGeoRelevance]   = useState('')
   const [evidenceLevel, setEvidenceLevel] = useState('')
   const [icmjeVerif, setIcmjeVerif]       = useState('')
-  const [submitting, setSub]              = useState(false)
-  const [success, setSuccess]             = useState(false)
   const [error, setError]                 = useState('')
-  const [savedUniversity, setSavedUniversity] = useState('')
 
   useEffect(() => {
     if (pending?.translatorName) setAuthor(pending.translatorName)
   }, [pending])
 
-  async function handleSubmit(e) {
+  function handleEmail(e) {
     e.preventDefault()
-    // Validate all required fields
     if (!sourceTitle.trim()) { setError('Please enter the source paper title.'); return }
-    if (!sourceLink.trim()) { setError('Please provide a source link or DOI.'); return }
-    if (!author.trim()) { setError('Please enter the researcher/translator name.'); return }
-    if (!pending?.university || pending.university === '— Select Your University —') { setError('Please select your university on the Translation page.'); return }
-    if (!abstractEng.trim()) { setError('Please provide the English abstract.'); return }
-    if (!abstractOrom.trim()) { setError('Please provide the Afaan Oromo Guduunfaa (Key Takeaway).'); return }
-    if (!glossary.trim()) { setError('Please provide the medical glossary.'); return }
-    if (!implNote.trim()) { setError('Please provide the implementation note for Oromia.'); return }
-    if (!focusArea.trim()) { setError('Please select a focus area.'); return }
-    if (!geoRelevance.trim()) { setError('Please specify geographic relevance.'); return }
-    if (!evidenceLevel.trim()) { setError('Please select the evidence level.'); return }
-    if (!icmjeVerif.trim()) { setError('Please provide the ICMJE verification statement.'); return }
-    if (!pending) { setError('No translation data found. Please translate a document first.'); return }
-
-    setSub(true)
+    if (!author.trim()) { setError('Please enter your name.'); return }
     setError('')
 
-    const wordCount = pending.researchMetadata?.match(/Word Count:\s*(\d+)/)?.[1]
-      ? parseInt(pending.researchMetadata.match(/Word Count:\s*(\d+)/)[1])
-      : 0
+    const wordCount = pending?.researchMetadata?.match(/Word Count:\s*(\d+)/)?.[1] || 'N/A'
+    const university = pending?.university || 'Not specified'
 
-    try {
-      const submissionData = {
-        userId:               user?.uid || 'anonymous',
-        timestamp:            serverTimestamp(),
-        sourceTitle:          sourceTitle.trim(),
-        sourceLink:           sourceLink.trim(),
-        author:               author.trim() || 'Anonymous',
-        direction:            pending.direction,
-        sourceType:           pending.sourceType,
-        university:           pending.university || 'Not specified',
-        wordCount,
-        fullTranslation:      pending.fullTranslation,
-        terminologyNotes:     pending.terminologyNotes,
-        reviewerVerification: pending.reviewerVerification,
-        researchMetadata:     pending.researchMetadata,
+    const subject = `[OHKB Clinical Evidence] ${sourceTitle.trim()}`
 
-        // Metadata Package
-        metadataPackage: {
-          bilingualAbstract: { english: abstractEng.trim(), oromo: abstractOrom.trim() },
-          medicalGlossary:   glossary.trim(),
-          implementationNote: implNote.trim(),
-          registryMetadata:  { focusArea: focusArea.trim(), geoRelevance: geoRelevance.trim(), evidenceLevel: evidenceLevel.trim() },
-          icmjeVerification: icmjeVerif.trim(),
-        }
-      }
+    const body = `Dear Dr. Ibro,
 
-      await addDoc(collection(db, 'translations'), submissionData)
+Please find attached my complete clinical evidence synthesis for the OHKB research registry.
 
-      try {
-        await fetch('/api/send-submission', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...submissionData, timestamp: new Date().toISOString() })
-        })
-      } catch (emailErr) {
-        console.error('Email notification failed:', emailErr)
-      }
+SUBMISSION DETAILS
+==================
+Title: ${sourceTitle.trim()}
+Researcher / Translator: ${author.trim()}
+University: ${university}
+Source / DOI: ${sourceLink.trim() || 'N/A'}
+Word Count: ${wordCount}
 
-      setSavedUniversity(pending.university || '')
-      setSuccess(true)
-      setPending(null)
-    } catch (err) {
-      setError('Failed to save contribution: ' + (err.message || 'Unknown error'))
-    } finally {
-      setSub(false)
-    }
-  }
+------------------------------------------------------------
+COMPONENT 1 — BILINGUAL ABSTRACT (ENGLISH)
+------------------------------------------------------------
+${abstractEng.trim() || '(not filled)'}
 
-  if (success) {
-    return (
-      <div style={{ padding: '60px 48px', maxWidth: 720, margin: '0 auto' }} className="submit-pad">
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>✦</div>
-          <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, marginBottom: 12 }}>Clinical Evidence Synthesis Submitted</h1>
-          <p style={{ color: '#555', fontSize: 16, lineHeight: 1.6 }}>
-            Your complete metadata package is saved. Complete the final step to finalize your publication submission.
-          </p>
-        </div>
+------------------------------------------------------------
+COMPONENT 1 — AFAAN OROMO GUDUUNFAA
+------------------------------------------------------------
+${abstractOrom.trim() || '(not filled)'}
 
-        <div style={{ background: '#FFF0E8', border: '1px solid #FFBBA8', borderRadius: 14, padding: 28, marginBottom: 32 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: '#111' }}>📧 Email Your Complete Submission</h2>
-          <p style={{ fontSize: 14, color: '#333', marginBottom: 20, lineHeight: 1.6 }}>
-            Send your full contribution package (translation + all 5 metadata components) as a <strong>PDF</strong> to <strong style={{ color: R }}>aimonibssa@gmail.com</strong>
-          </p>
+------------------------------------------------------------
+COMPONENT 2 — MEDICAL GLOSSARY
+------------------------------------------------------------
+${glossary.trim() || '(not filled)'}
 
-          <div style={{ background: 'white', borderRadius: 8, padding: 16, fontFamily: "'Outfit', sans-serif", fontSize: 13, lineHeight: 1.8, color: '#555', marginBottom: 20, border: '1px solid #FFD8B8' }}>
-            <strong style={{ color: '#111' }}>Email Subject:</strong><br />
-            <code style={{ background: '#f5f5f5', padding: '4px 8px', borderRadius: 4 }}>[OHKB Clinical Evidence] {sourceTitle}</code>
+------------------------------------------------------------
+COMPONENT 3 — IMPLEMENTATION NOTE (OROMIA)
+------------------------------------------------------------
+${implNote.trim() || '(not filled)'}
 
-            <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #F0F0F0' }}>
-              <strong style={{ color: '#111' }}>Email Body:</strong><br />
-              Dear Dr. Ibro,<br />
-              <br />
-              Please find attached my complete clinical evidence synthesis for the research registry.<br />
-              <br />
-              • Title: {sourceTitle}<br />
-              • University: {savedUniversity}<br />
-              • Source: {sourceLink}<br />
-              • Word Count: {pending?.researchMetadata?.match(/Word Count:\s*(\d+)/)?.[1] || 'N/A'}<br />
-              <br />
-              Thank you for reviewing my submission.
-            </div>
-          </div>
+------------------------------------------------------------
+COMPONENT 4 — REGISTRY METADATA
+------------------------------------------------------------
+Focus Area: ${focusArea.trim() || 'N/A'}
+Geographic Relevance: ${geoRelevance.trim() || 'N/A'}
+Evidence Level: ${evidenceLevel.trim() || 'N/A'}
 
-          <div style={{ background: '#F0F0ED', borderRadius: 8, padding: 12 }}>
-            <p style={{ fontSize: 12, color: '#666', margin: 0, lineHeight: 1.6 }}>
-              <strong>Your PDF must include ALL 5 components:</strong><br />
-              1. Bilingual Abstract (English + Afaan Oromo)<br />
-              2. Medical Glossary (English | Oromo | Context)<br />
-              3. Implementation Note (for Oromia)<br />
-              4. Registry Metadata (Focus Area, Geographic Relevance, Evidence Level)<br />
-              5. ICMJE Verification Statement
-            </p>
-          </div>
-        </div>
+------------------------------------------------------------
+COMPONENT 5 — ICMJE VERIFICATION STATEMENT
+------------------------------------------------------------
+${icmjeVerif.trim() || '(not filled)'}
 
-        <div style={{ background: '#F8F8F6', borderRadius: 12, padding: 20, marginBottom: 32, fontSize: 13, color: '#555', lineHeight: 1.7 }}>
-          <strong style={{ display: 'block', marginBottom: 8, color: '#111' }}>⏱ Timeline:</strong>
-          ✓ Submission closes: <strong>April 20, 2026 midnight</strong><br />
-          ✓ U.S. students must submit by this date to qualify for co-authorship<br />
-          ✓ Publication: Week of April 20 across all partner universities
-        </div>
+------------------------------------------------------------
+FULL TRANSLATION (from Translation Engine)
+------------------------------------------------------------
+${pending?.fullTranslation?.slice(0, 3000) || '(attach PDF with full translation)'}
 
-        <button onClick={() => nav('/portal/translate')}
-          style={{ width: '100%', background: R, color: 'white', border: 'none', borderRadius: 10, padding: '14px', fontWeight: 700, fontSize: 15, cursor: 'pointer', fontFamily: "'Outfit', sans-serif" }}>
-          ← Start Another Translation
-        </button>
-      </div>
-    )
+Thank you for reviewing my submission.
+
+${author.trim()}`
+
+    const mailto = `mailto:aimonibssa@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.location.href = mailto
   }
 
   return (
@@ -216,7 +145,7 @@ export default function SubmitAudit() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleEmail}>
 
         {/* Source Information */}
         <div style={{ background: 'white', border: '1px solid #E8E4DF', borderRadius: 14, padding: 28, marginBottom: 20 }}>
@@ -308,14 +237,13 @@ export default function SubmitAudit() {
           </div>
         )}
 
-        <button type="submit" disabled={submitting || !pending}
-          style={{
-            width: '100%', background: submitting || !pending ? '#ddd' : R, color: submitting || !pending ? '#999' : 'white',
-            border: 'none', borderRadius: 10, padding: '16px', fontWeight: 700, fontSize: 16,
-            cursor: submitting || !pending ? 'not-allowed' : 'pointer', fontFamily: "'Outfit', sans-serif",
-          }}>
-          {submitting ? 'Processing…' : '✦ Complete All 5 Components — Save Metadata Package'}
+        <button type="submit"
+          style={{ width: '100%', background: R, color: 'white', border: 'none', borderRadius: 10, padding: '16px', fontWeight: 700, fontSize: 16, cursor: 'pointer', fontFamily: "'Outfit', sans-serif" }}>
+          📧 Open Email to aimonibssa@gmail.com
         </button>
+        <p style={{ textAlign: 'center', fontSize: 12, color: '#999', marginTop: 10 }}>
+          This will open your email app pre-filled with everything you wrote above. Attach your PDF and hit send.
+        </p>
       </form>
 
       <style>{`
